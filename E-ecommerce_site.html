@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ລາວ ຊັອບປິ້ງ - Lao Shopping</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        
+        .noto-sans-lao {
+            font-family: "Noto Sans Lao", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+        }
+        
+        body {
+            font-family: "Noto Sans Lao", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23667eea;stop-opacity:1" /><stop offset="100%" style="stop-color:%23764ba2;stop-opacity:1" /></linearGradient></defs><rect width="1200" height="600" fill="url(%23grad1)"/></svg>');
+            background-size: cover;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .cart-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .login-container, .register-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .page-section {
+            display: none;
+            padding: 40px 0;
+        }
+        
+        .page-section.active {
+            display: block;
+        }
+        
+        .price {
+            color: #e74c3c;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+        
+        .cart-badge {
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8em;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand fs-3" href="#" onclick="showPage('home')">
+                <i class="fas fa-shopping-bag me-2"></i>ລາວ ຊັອບປິ້ງ
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('home')">ໜ້າຫຼັກ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('products')">ສິນຄ້າ</a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="#" onclick="showPage('cart')">
+                            <i class="fas fa-shopping-cart"></i> ກະຕ່າ
+                            <span class="cart-badge" id="cart-count">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('login')">ເຂົ້າລະບົບ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('register')">ລົງທະບຽນ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page-section active">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="display-4 fw-bold mb-4">ຍິນດີຕ້ອນຮັບສູ່ ລາວ ຊັອບປິ້ງ</h1>
+                <p class="lead mb-4">ຊື້ສິນຄ້າຄຸນນະພາບດີທີ່ສຸດ ດ້ວຍລາຄາທີ່ເໝາະສົມ</p>
+                <button class="btn btn-primary btn-lg" onclick="showPage('products')">
+                    <i class="fas fa-shopping-bag me-2"></i>ເລີ່ມຊື້ເລີຍ
+                </button>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="container my-5">
+            <h2 class="text-center mb-5 text-white">ສິນຄ້າແນະນຳ</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" class="card-img-top" alt="Phone">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">ໂທລະສັບສະມາດໂຟນ</h5>
+                            <p class="card-text">ໂທລະສັບລຸ້ນໃໝ່ ຄຸນນະພາບສູງ</p>
+                            <p class="price">2,500,000 ກີບ</p>
+                            <button class="btn btn-primary" onclick="addToCart('phone', 'ໂທລະສັບສະມາດໂຟນ', 2500000)">
+                                <i class="fas fa-cart-plus me-2"></i>ເພີ່ມໃສ່ກະຕ່າ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop" class="card-img-top" alt="Laptop">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">ແລັບທັອບ</h5>
+                            <p class="card-text">ຄອມພິວເຕີໂນດບຸກ ເໝາະສຳລັບວຽກ</p>
+                            <p class="price">8,000,000 ກີບ</p>
+                            <button class="btn btn-primary" onclick="addToCart('laptop', 'ແລັບທັອບ', 8000000)">
+                                <i class="fas fa-cart-plus me-2"></i>ເພີ່ມໃສ່ກະຕ່າ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop" class="card-img-top" alt="Headphones">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">ຫູຟັງໄຮ້ສາຍ</h5>
+                            <p class="card-text">ຫູຟັງຄຸນນະພາບສູງ ສຽງແຈ້ງ</p>
+                            <p class="price">450,000 ກີບ</p>
+                            <button class="btn btn-primary" onclick="addToCart('headphones', 'ຫູຟັງໄຮ້ສາຍ', 450000)">
+                                <i class="fas fa-cart-plus me-2"></i>ເພີ່ມໃສ່ກະຕ່າ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Products Page -->
+    <div id="products" class="page-section" style="margin-top: 80px;">
+        <div class="container">
+            <h2 class="text-center mb-5 text-white">ສິນຄ້າທັງໝົດ</h2>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" class="card-img-top" alt="Phone">
+                        <div class="card-body">
+                            <h5 class="card-title">ໂທລະສັບສະມາດໂຟນ</h5>
+                            <p class="card-text">ໂທລະສັບລຸ້ນໃໝ່ ຄຸນນະພາບສູງ ກ້ອງແຈ້ງ</p>
+                            <p class="price">2,500,000 ກີບ</p>
+                            <button class="btn btn-primary w-100" onclick="addToCart('phone', 'ໂທລະສັບສະມາດໂຟນ', 2500000)">
+                                <i class="fas fa-cart-plus me-2"></i>ເພີ່ມໃສ່ກະຕ່າ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop" class="card-img-top" alt="Laptop">
+                        <div class="card-body">
+                            <h5 class="card-title">ແລັບທັອບ</h5>
+                            <p class="card-text">ຄອມພິວເຕີໂນດບຸກ ເໝາະສຳລັບວຽກ ແລະ ເກມ</p>
+                            <p class="price">8,000,000 ກີບ</p>
+                            <button class="btn btn-primary w-100" onclick="addToCart('laptop', 'ແລັບທັອບ', 8000000)">
+                                <i class="fas fa-cart-plus me-2"></i>ເພີ່ມໃສ່ກະຕ່າ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop" class="card-img-top" alt="Headphones">
+                        <div class="card-body">
+                            <h5 class="card-title">ຫູຟັງໄຮ້ສາຍ</h5>
+                            <p class="card-text">ຫູຟັງຄຸນນະພາບສູງ ສຽງແຈ້ງ ໄຮ້ສາຍ</p>
+                            <p class="price">450,000 ກີບ</p>
+                            <button class="btn btn-primary w-100" onclick="addToCart('headphones', 'ຫູຟັງໄຮ້ສາຍ', 450000)">
+                                <i class="fas fa-cart-plus me-2"></i>ເພີ່ມໃສ່ກະຕ່າ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><rect width='400' height='300' fill='%23fff3e0'/><text x='200' y='150' text-anchor='middle' fill='%23ef6c00' font-family='Arial' font-size='18'>ໂທລະทັດ</text></svg>" class="card-img-top" alt="TV">
+                        <div class="card-body">
+                            <h5 class="card-title">ໂທລະທັດ Smart TV</h5>
+                            <p class="card-text">ໂທລະທັດ 55 ນິ້ວ ຄຸນນະພາບ 4K</p>
+                            <p class="price">5,500,000 ກີບ</p>
+                            <button class="btn btn-primary w-100" onclick="addToCart('tv', 'ໂທລະທັດ Smart TV', 5500000)">
+                                <i class="fas fa-cart-plus me-2"></i>ເພີ່ມໃສ່ກະຕ່າ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&h=300&fit=crop" class="card-img-top" alt="Camera">
+                        <div class="card-body">
+                            <h5 class="card-title">ກ້ອງຖ່າຍຮູບ</h5>
+                            <p class="card-text">ກ້ອງຖ່າຍຮູບດິຈິຕອນ ຄຸນນະພາບສູງ</p>
+                            <p class="price">3,200,000 ກີບ</p>
+                            <button class="btn btn-primary w-100" onclick="addToCart('camera', 'ກ້ອງຖ່າຍຮູບ', 3200000)">
+                                <i class="fas fa-cart-plus me-2"></i>ເພີ່ມໃສ່ກະຕ່າ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop" class="card-img-top" alt="Tablet">
+                        <div class="card-body">
+                            <h5 class="card-title">ແທັບເລັດ</h5>
+                            <p class="card-text">ແທັບເລັດ 10 ນິ້ວ ເໝາະສຳລັບອ່ານ</p>
+                            <p class="price">1,800,000 ກີບ</p>
+                            <button class="btn btn-primary w-100" onclick="addToCart('tablet', 'ແທັບເລັດ', 1800000)">
+                                <i class="fas fa-cart-plus me-2"></i>ເພີ່ມໃສ່ກະຕ່າ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Page -->
+    <div id="cart" class="page-section" style="margin-top: 80px;">
+        <div class="container">
+            <h2 class="text-center mb-5 text-white">ກະຕ່າສິນຄ້າ</h2>
+            
+            <div id="cart-items">
+                <div class="text-center text-white">
+                    <i class="fas fa-shopping-cart fa-3x mb-3 opacity-50"></i>
+                    <p class="fs-5">ກະຕ່າຂອງທ່ານວ່າງເປົ່າ</p>
+                    <button class="btn btn-primary" onclick="showPage('products')">
+                        <i class="fas fa-shopping-bag me-2"></i>ໄປຊື້ສິນຄ້າ
+                    </button>
+                </div>
+            </div>
+            
+            <div id="cart-summary" class="mt-4" style="display: none;">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>ສະຫຼຸບການສັ່ງຊື້</h4>
+                        <div class="d-flex justify-content-between">
+                            <span>ລວມທັງໝົດ:</span>
+                            <span id="total-price" class="price fs-4">0 ກີບ</span>
+                        </div>
+                        <button class="btn btn-success btn-lg w-100 mt-3">
+                            <i class="fas fa-credit-card me-2"></i>ຊຳລະເງິນ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login" class="page-section" style="margin-top: 80px;">
+        <div class="container d-flex justify-content-center align-items-center min-vh-100">
+            <div class="login-container">
+                <div class="text-center mb-4">
+                    <i class="fas fa-user-circle fa-3x text-primary mb-3"></i>
+                    <h3>ເຂົ້າລະບົບ</h3>
+                </div>
+                
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">ອີເມວ</label>
+                        <input type="email" class="form-control" placeholder="ໃສ່ອີເມວຂອງທ່ານ">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ລະຫັດຜ່ານ</label>
+                        <input type="password" class="form-control" placeholder="ໃສ່ລະຫັດຜ່ານ">
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input">
+                        <label class="form-check-label">ຈື່ຂ້ອຍ</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>ເຂົ້າລະບົບ
+                    </button>
+                    
+                    <div class="text-center">
+                        <a href="#" class="text-decoration-none">ລືມລະຫັດຜ່ານ?</a>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <span>ຍັງບໍ່ມີບັນຊີ? </span>
+                        <a href="#" class="text-decoration-none" onclick="showPage('register')">ລົງທະບຽນ</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="register" class="page-section" style="margin-top: 80px;">
+        <div class="container d-flex justify-content-center align-items-center min-vh-100">
+            <div class="register-container">
+                <div class="text-center mb-4">
+                    <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+                    <h3>ລົງທະບຽນ</h3>
+                </div>
+                
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">ຊື່ເຕັມ</label>
+                        <input type="text" class="form-control" placeholder="ໃສ່ຊື່ເຕັມຂອງທ່ານ">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ອີເມວ</label>
+                        <input type="email" class="form-control" placeholder="ໃສ່ອີເມວຂອງທ່ານ">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ເບີໂທ</label>
+                        <input type="tel" class="form-control" placeholder="ໃສ່ເບີໂທຂອງທ່ານ">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ລະຫັດຜ່ານ</label>
+                        <input type="password" class="form-control" placeholder="ສ້າງລະຫັດຜ່ານ">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ຢືນຢັນລະຫັດຜ່ານ</label>
+                        <input type="password" class="form-control" placeholder="ຢືນຢັນລະຫັດຜ່ານອີກຄັ້ງ">
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input">
+                        <label class="form-check-label">ຂ້ອຍຍອມຮັບ <a href="#" class="text-decoration-none">ຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂ</a></label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                        <i class="fas fa-user-plus me-2"></i>ລົງທະບຽນ
+                    </button>
+                    
+                    <div class="text-center">
+                        <span>ມີບັນຊີແລ້ວ? </span>
+                        <a href="#" class="text-decoration-none" onclick="showPage('login')">ເຂົ້າລະບົບ</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>ກ່ຽວກັບພວກເຮົາ</h5>
+                    <p>ລາວ ຊັອບປິ້ງ ເປັນຮ້ານຄ້າອອນໄລນ໌ທີ່ນຳສະເໜີສິນຄ້າຄຸນນະພາບດີດ້ວຍລາຄາທີ່ເໝາະສົມ</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h5></h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none" onclick="showPage('home')"></a></li>
+                        <li><a href="#" class="text-white text-decoration-none" onclick="showPage('products')"></a></li>
+                        <li><a href="#" class="text-white text-decoration-none"></a></li>
+                        <li><a href="#" class="text-white text-decoration-none"></a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h5>ຕິດຕໍ່ພວກເຮົາ</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i>ວຽງຈັນ, ລາວ</p>
+                    <p><i class="fas fa-phone me-2"></i>+856 20 96384621</p>
+                    <p><i class="fas fa-envelope me-2"></i>info@laoshopping.la</p>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2025 ລາວ ຊັອບປິ້ງ. ສະຫງວນລິຂະສິດ.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Shopping cart functionality
+        let cart = [];
+        
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update navbar active state
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function addToCart(id, name, price) {
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            updateCartDisplay();
+            updateCartCount();
+            
+            // Show success message
+            showNotification('ເພີ່ມສິນຄ້າໃສ່ກະຕ່າແລ້ວ!', 'success');
+        }
+        
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartDisplay();
+            updateCartCount();
+            showNotification('ລົບສິນຄ້າອອກຈາກກະຕ່າແລ້ວ!', 'info');
+        }
+        
+        function updateQuantity(id, newQuantity) {
+            const item = cart.find(item => item.id === id);
+            if (item && newQuantity > 0) {
+                item.quantity = newQuantity;
+                updateCartDisplay();
+                updateCartCount();
+            } else if (newQuantity <= 0) {
+                removeFromCart(id);
+            }
+        }
+        
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+        }
+        
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartSummary = document.getElementById('cart-summary');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center text-white">
+                        <i class="fas fa-shopping-cart fa-3x mb-3 opacity-50"></i>
+                        <p class="fs-5">ກະຕ່າຂອງທ່ານວ່າງເປົ່າ</p>
+                        <button class="btn btn-primary" onclick="showPage('products')">
+                            <i class="fas fa-shopping-bag me-2"></i>ໄປຊື້ສິນຄ້າ
+                        </button>
+                    </div>
+                `;
+                cartSummary.style.display = 'none';
+                return;
+            }
+            
+            let cartHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h5 class="mb-1">${item.name}</h5>
+                                <p class="text-muted mb-0">${item.price.toLocaleString()} ກີບ / ຊິ້ນ</p>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="quantity-control">
+                                    <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${item.quantity - 1})">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span class="mx-2 fw-bold">${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${item.quantity + 1})">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <p class="price mb-0">${itemTotal.toLocaleString()} ກີບ</p>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-outline-danger btn-sm" onclick="removeFromCart('${item.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItemsContainer.innerHTML = cartHTML;
+            document.getElementById('total-price').textContent = `${total.toLocaleString()} ກີບ`;
+            cartSummary.style.display = 'block';
+        }
+        
+        function showNotification(message, type = 'success') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type === 'success' ? 'success' : 'info'} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 100px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (notification && notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+        
+        // Form submission handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Login form
+            const loginForm = document.querySelector('#login form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('ເຂົ້າລະບົບສຳເລັດ!', 'success');
+                    showPage('home');
+                });
+            }
+            
+            // Register form
+            const registerForm = document.querySelector('#register form');
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('ລົງທະບຽນສຳເລັດ!', 'success');
+                    showPage('login');
+                });
+            }
+            
+            // Initialize cart count
+            updateCartCount();
+        });
+        
+        // Handle navbar collapse on mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarToggler = document.querySelector('.navbar-toggler');
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            
+            // Close navbar when clicking on nav links (mobile)
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 992) {
+                        navbarCollapse.classList.remove('show');
+                    }
+                });
+            });
+        });
+        
+        // Smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Add loading states for better UX
+        function addLoadingState(button) {
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ກຳລັງໂຫຼດ...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.disabled = false;
+            }, 1000);
+        }
+        
+        // Add click handlers for buttons with loading states
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('.btn-primary, .btn-success')) {
+                addLoadingState(e.target);
+            }
+        });
+    </script>
+</body>
+</html>
